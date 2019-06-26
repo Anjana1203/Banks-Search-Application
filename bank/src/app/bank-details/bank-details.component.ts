@@ -42,7 +42,6 @@ favLocalData = []
 
       this.favLocalData.push(localStorage.getItem(key))
     }
-      // alert(this.favLocalData)
 
   	this.pagination = [
        {id: 1, val: "5"},
