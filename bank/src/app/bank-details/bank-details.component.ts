@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
-import { CacheService } from './../cache.service';
+
 
 
 @Component({
@@ -21,12 +21,13 @@ export class BankDetailsComponent implements OnInit {
 	dataSource;
 	displayedColumns;
   datathere = 0;
+  selectedPlace = [];
 
 	server_url = "https://vast-shore-74260.herokuapp.com/banks?city=MUMBAI";
 	server_url1 = "https://vast-shore-74260.herokuapp.com/banks?city=";
-favLocalData = []
+  favLocalData = []
 	ourData = []
-  prevData = [[]]
+  
 	abc = {}
 	pagination = []
 	selectedValue = []
@@ -34,14 +35,8 @@ favLocalData = []
 	searchText;
 
 
-  constructor(private httpClient: HttpClient,  private cacheService: CacheService) { }
+  constructor(private httpClient: HttpClient) { }
   	ngOnInit() {
-
-      for(let i = 0; i < localStorage.length; i++){
-      let key = localStorage.key(i);
-
-      this.favLocalData.push(localStorage.getItem(key))
-    }
 
   	this.pagination = [
        {id: 1, val: "5"},
@@ -69,117 +64,83 @@ favLocalData = []
 	      textField: 'item_text',
 	      itemsShowLimit: 3,
 	    };
-
+// Get the data from Api (by default it shows details of banks in Mumbai)
   	this.httpClient.get<[]>(this.server_url).subscribe(
 		(res) => {
   		this.ourData = res
-      // alert(JSON.stringify(res))
-      // alert(JSON.stringify(this.ourData))
-  		// this.displayedColumns = ['ifsc', 'bank_id', 'branch', 'address'];
-   	// 	this.dataSource = new MatTableDataSource(this.ourData);
 		});
   	}
 
+// showing the banks & it's details for a particular place when select 
 	onItemSelect(item: any) {
 		console.log(item);
-		// alert(JSON.stringify(item))
+    this.selectedPlace = item;
 		this.abc= item["item_text"];
-		// alert(this.abc)
 		this.httpClient.get<[]>(this.server_url1+this.abc).subscribe(
-			(res) => {alert(JSON.stringify(res))
+			(res) => {
 			this.ourData = res
-			// this.displayedColumns = ['ifsc', 'bank_id', 'branch', 'address'];
-			// this.dataSource = new MatTableDataSource(this.ourData);
 		});
 	}
 	
 	onItemDeSelect(item: any) {
-		console.log(item)
+		//console.log(item)
 	}
 
+// Hanlde when click on add to favourite button(or remove)
 	handleClick(event: Event, item: any) {
-  		console.log('Click!', item)
-      // alert(JSON.stringify(item))
-      // localStorage.setItem(item["ifsc"], JSON.stringify(item));
       for (let i = 0; i < localStorage.length; i++){
           let key = localStorage.key(i);
           let value = localStorage.getItem(key);
-          console.log(key, value);
-          // alert(value)
           if(key==item["ifsc"])
           {
-            // alert(key)
+            
             this.datathere=1
-            // localStorage.removeItem(key);
+            
           }
-          // else{
-          //   alert("abc")
-
-          //   // localStorage.setItem(item["ifsc"], JSON.stringify(item));
-          // }
+          
       }
       if (this.datathere==0) {
-        item["flag"] = true
+        // item["flag"] = true
             localStorage.setItem(item["ifsc"], JSON.stringify(item));
-            alert("THE BANK ( IFSC: "+ item["ifsc"] +") ADDED IN TO FAVORITES")
-        
+            alert("THE BANK ( IFSC: "+ item["ifsc"] +") ADDED IN TO FAVORITES")        
       }
       else{
             localStorage.removeItem(item["ifsc"]);
             alert("THE BANK ( IFSC: "+ item["ifsc"] +") REMOVED FROM FAVORITES")
-
             this.datathere=0;
-
       }
 	}
 
+//handle when click on my favorite banks button 
   favorites(event: Event){
       var ourData_temp =[];
       this.ourData = []
-      alert(typeof(this.ourData))
+      
 
     for(let i = 0; i < localStorage.length; i++){
       let key = localStorage.key(i);
-      // alert(localStorage.getItem(key))
-
       ourData_temp.push(localStorage.getItem(key));
-      alert(typeof(localStorage[i]))
-      // alert(localStorage.getItem(key))
+      
       this.ourData.push(JSON.parse(localStorage.getItem(key)));
-            // alert("inside"+JSON.stringify(this.ourData))
+            
           }
-          // this.ourData = ourData_temp
-            alert("outside"+JSON.stringify(this.ourData))
-            // alert(this.ourData[1][5])
-            // this.displayedColumns = ['ifsc', 'bank_id', 'branch', 'address'];
-            // this.dataSource = new MatTableDataSource(this.ourData);
-      
-      
+           
         }
-      
+
+
+ //handles when click on "back to all Banks" button     
         backtoall(event: Event){
-          this.onItemSelect({ item_id: 1, item_text: 'MUMBAI' });
+          if (this.selectedPlace.length==0) {
+            // alert("in []"+ JSON.stringify(this.selectedItems[0]) + typeof(this.selectedItems))
+            this.onItemSelect(this.selectedItems[0])
+          }
+          else
+          {
+            // alert("in else" + JSON.stringify(this.selectedPlace) + typeof(this.selectedPlace))
+            this.onItemSelect(this.selectedPlace);
+          }
         }
       
-        // handleClick(event: Event, item: any) {)
-
-  //   this.favorite = !this.favorite;
-
-    
-  //     console.log('Click!', item)
-  //     localStorage.setItem(item["ifsc"], JSON.stringify(item));
-  //     for (let i = 0; i < localStorage.length; i++){
-  //         let key = localStorage.key(i);
-  //         let value = localStorage.getItem(key);
-  //         console.log(key, value);
-  //         if(key!=item["ifsc"])  
-  //     this.buttonName = "add to favorite";
-  //   else
-  //     this.buttonName = "favorite";
-  //   localStorage.removeItem(key);
-  //     }
-  // }
-
 }
 
 
