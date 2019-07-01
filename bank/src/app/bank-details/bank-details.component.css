@@ -4,9 +4,21 @@
 	margin: 5px;
 }
 .tableStyle{
-	margin-left: 30px;
+	margin-left: 50px;
 }
 .buttspace{
 	margin-right: 20px;
 	margin-left: 20px;
 }
+#head{
+	padding: 15px;
+}
+
+/*ng-multiselect-dropdown {
+	padding: 16px 10px;
+	text-align: left;
+	background-color: red;
+	color: green;
+
+
+}*/

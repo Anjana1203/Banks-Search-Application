@@ -13,7 +13,8 @@ import {MatPaginator, MatTableDataSource} from '@angular/material';
 export class BankDetailsComponent implements OnInit {
 
   public favorite:boolean = true;
-  public buttonName:any = 'add to favorite';
+  public buttonName:any = 'Favorite';
+ 
 
 	dropdownList = [];
 	selectedItems = [];
@@ -33,10 +34,15 @@ export class BankDetailsComponent implements OnInit {
 	selectedValue = []
 	selectedValue1 = []
 	searchText;
-
+  localData = []
 
   constructor(private httpClient: HttpClient) { }
   	ngOnInit() {
+
+      for(let i = 0; i < localStorage.length; i++){
+      let key = localStorage.key(i);
+     this.localData.push(JSON.parse(localStorage.getItem(key)));
+    }
 
   	this.pagination = [
        {id: 1, val: "5"},

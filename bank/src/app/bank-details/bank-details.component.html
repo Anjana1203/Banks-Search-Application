@@ -1,4 +1,7 @@
-<div class="card bg">
+<div ></div>
+<div class="main-content">
+<div class="container-fluid">
+<div class="card bg" id="head">
   <!-- <div class="card-header card-header-danger"> -->
     <div class="row">
     	<div class="col-md-2">
@@ -13,11 +16,11 @@
     			</ng-multiselect-dropdown>
     	</div>
     		<form class="col-md-3">
-          <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="&#61442;  Start searching">
+          <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder=" Start searching">
     		</form>
       <!-- <div class=" col-md-1"></div> -->
-        <label>Select size for your table(Paginate)</label>
-        <select [(ngModel)]="selectedValue" class="col-md-1">
+        <label>Select size for your table(Paginate) : &nbsp;&nbsp; </label>
+        <select [(ngModel)]="selectedValue" class="form-control" style="width: auto;">
           <option *ngFor="let c of pagination">{{c.val}}</option>
         </select>
       <div class="col-md-1"></div>
@@ -26,9 +29,12 @@
     </div>
   <!-- </div> -->
 </div>
+</div>
+</div>
+<br>
 
   <!-- <div class="container"> -->
-    <table class="table table-striped tableStyle">
+    <table class="table table-striped tableStyle" style="width: 1400px;">
       <thead>
         <tr>
           <th>Favorites (Add or Remove)</th>
@@ -36,8 +42,8 @@
           <th>bank_id</th>
           <th>branch</th>
           <th>address</th>
-          <th>city</th>
-          <th>district</th>
+          <!-- <th>city</th>
+          <th>district</th> -->
           <th>state</th>
           <th>bank_name</th>
         </tr>
@@ -45,19 +51,24 @@
     
     <tbody>
       <tr *ngFor="let item of ourData | filter:searchText | paginate: { itemsPerPage: selectedValue, currentPage: p }" >
-        <td><p ng-if="item.flag"><button (click)='handleClick($event, item)' type='button' class="btn btn-danger"> {{buttonName}}</button></p></td>
+        <td>
+          <!-- <p *ngFor="let a of localData"><p ng-if="a.ifsc==item.ifsc"> -->
+          <button (click)='handleClick($event, item)' type='button' class="btn btn-danger" id="fav"> {{buttonName}}</button>
+        <!-- </p></p> -->
+      </td>
         <td>{{item.ifsc}}</td>
         <td>{{ item.bank_id }}</td>
         <td>{{ item.branch }}</td>
         <td>{{ item.address }}</td>
-        <td>{{ item.city }}</td>
-        <td>{{ item.district }}</td>
+        <!-- <td>{{ item.city }}</td>
+        <td>{{ item.district }}</td> -->
         <td>{{ item.state }}</td>
         <td>{{ item.bank_name}}</td>
       </tr>
     </tbody>
   </table>
   <!-- </div> -->
+  <!-- <p *ngFor="let a of localData">{{a.ifsc}}</p> -->
 
 <pagination-controls (pageChange)="p = $event"></pagination-controls>
 <!-- </div> -->
